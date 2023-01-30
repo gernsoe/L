@@ -1,0 +1,7 @@
+cnst @HEJ 2
+syscall;
+$j
+#HERE
+#H3r3
+goto #HERE
+goto #H3r3
