@@ -4,9 +4,23 @@ module.exports = grammar({
 	rules: {
 		source_file: $ => repeat($.definition),
 
-		definition: $ => choice($.syscall, $.register, $.constant, $.label, $.goto),
+		definition: $ => choice($.syscall, $.register, $.constant, $.label, $.goto, $.assignment),
 
 		syscall: $ => 'syscall;',
+
+		assignment: $ => choice(
+			$.readMemory,
+			$.writeMemory,
+			seq($.register, ':=', $.constantDefinitions)
+		),
+
+		readMemory: $ => seq($.register, ':=', $.byteRegister),
+
+		writeMemory: $ => seq($.byteRegister, ':=', $.bytesAsHex),
+
+		byteRegister: $ => seq('[', $.register, ',', $.memorySizeBytes, ']'),
+
+		constantDefinitions: $ => choice($.register, $.constant, $.label, $.number, $.word, $.bytesAsHex),
 
 		register: $ => /\$[x,y,i,j]/,
 		
@@ -18,6 +32,10 @@ module.exports = grammar({
 
 		number: $ => /\d+/,
 
-		word: $ => /[a-zA-Z]+/
+		memorySizeBytes: $ => /[1,2,4,8]/, 
+
+		word: $ => /[a-zA-Z]+/,
+
+		bytesAsHex: $ => /0x[0-9a-fA-F]+/
 	}
 });

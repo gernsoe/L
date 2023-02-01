@@ -1,0 +1,32 @@
+===============================
+Syscall
+===============================
+syscall;
+---
+(source_file
+      (definition
+        (syscall)))
+
+===============================
+Register
+===============================
+$x
+$i
+---
+(source_file
+      (definition
+        (register))
+      (definition
+        (register)))
+
+===============================
+Constant
+===============================
+cnst @STDOUT 1
+---
+
+(source_file
+      (definition
+        (constant
+          (word)
+          (number))))

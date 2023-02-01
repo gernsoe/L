@@ -1,0 +1,28 @@
+===============================
+ReadMemory
+===============================
+$x:=[$i,2]
+---
+(source_file
+      (definition
+        (assignment
+          (readMemory
+            (register)
+            (byteRegister
+              (register)
+              (memorySizeBytes))))))
+
+===============================
+WriteMemory
+===============================
+[$i,2]:= 0xffffffff000000ab
+---
+(source_file
+      (definition
+        (assignment
+          (writeMemory
+            (byteRegister
+              (register)
+              (memorySizeBytes))
+            (bytesAsHex)))))
+              
