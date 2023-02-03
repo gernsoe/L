@@ -2,7 +2,7 @@ module.exports = grammar({
 	name: 'L',
 	
 	rules: {
-		source_file: $ => seq($.declarations, $.statements),
+		source_file: $ => seq(optional($.declarations), $.statements),
 
 		declarations: $ =>
 			repeat1(
@@ -36,27 +36,9 @@ module.exports = grammar({
 
 		expression: $ =>
 			choice(
-				$.reader,
-				seq($.reader, $.binary_expression, $.reader),
-				seq($.unary_expression, $.reader)
-			),
-
-		binary_expression: $ =>
-			choice(
-				'|',
-				'&',
-				$.operator
-			),
-
-		unary_expression: $ =>
-			choice(
-				$.operator
-			),
-
-		operator: $ =>
-			choice(
-				'+',
-				'-'
+				seq($.reader, $._operator, $.reader),
+				seq($._operator, $.reader),
+				$.reader
 			),
 				
 		reader: $ =>
@@ -83,7 +65,7 @@ module.exports = grammar({
 
 		_data: $ => seq('&', $._word, /[0-9a-zA-Z"_-]/),
 
-		_register: () => /\$[x,y,i,j]/,
+		_register: () => /\$[x,y,i,j,?,!]/,
 
 		_bytes: () => /[1,2,4,8]/, 
 
@@ -92,6 +74,8 @@ module.exports = grammar({
 		_goto: $ => seq('goto', $._label),
 
 		_label: () => seq('#', /[a-zA-Z0-9]+/),
+
+		_operator: () => /[\+\/\-\*\|\&]+/,
 
 		_number: () => /\d+/,
 
