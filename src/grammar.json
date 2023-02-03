@@ -79,6 +79,18 @@
         "type": "SEQ",
         "members": [
           {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_label"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
             "type": "SYMBOL",
             "name": "statement"
           },
@@ -99,10 +111,6 @@
         {
           "type": "SYMBOL",
           "name": "_syscall"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_goto"
         },
         {
           "type": "SEQ",
@@ -271,19 +279,6 @@
     "_syscall": {
       "type": "STRING",
       "value": "syscall"
-    },
-    "_goto": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "goto"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_label"
-        }
-      ]
     },
     "_label": {
       "type": "SEQ",

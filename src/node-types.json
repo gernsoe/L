@@ -165,9 +165,5 @@
   {
     "type": "data",
     "named": false
-  },
-  {
-    "type": "goto",
-    "named": false
   }
 ]

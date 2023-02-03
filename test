@@ -9,5 +9,7 @@ $y:=@MSG_LENGTH;
 [$i,4]:=@SYS_WRITE;
 $j:=[$i,4] + 1;
 $j:=[$i,4] - 2;
-$x:=-5
-goto #HERE;
+$x:=-5;
+$? := 1;
+$! ?= $HERE - 1;
+$! := $HERE - 1;

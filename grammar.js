@@ -21,6 +21,7 @@ module.exports = grammar({
 		statements: $ => 
 			repeat1(
 				seq(
+					optional($._label),
 					$.statement, 
 					';', 
 					'\n'
@@ -30,7 +31,6 @@ module.exports = grammar({
 		statement: $ =>
 			choice(
 				$._syscall,
-				$._goto,
 				seq($.writer, ':=', $.expression)
 			),
 
@@ -70,8 +70,6 @@ module.exports = grammar({
 		_bytes: () => /[1,2,4,8]/, 
 
 		_syscall: () => 'syscall',
-		
-		_goto: $ => seq('goto', $._label),
 
 		_label: () => seq('#', /[a-zA-Z0-9]+/),
 
