@@ -2,62 +2,106 @@
   "name": "L",
   "rules": {
     "source_file": {
-      "type": "REPEAT",
-      "content": {
-        "type": "SYMBOL",
-        "name": "definition"
-      }
-    },
-    "definition": {
-      "type": "CHOICE",
+      "type": "SEQ",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "syscall"
+          "name": "declarations"
         },
         {
           "type": "SYMBOL",
-          "name": "register"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "constant"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "label"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "goto"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "assignment"
+          "name": "statements"
         }
       ]
     },
-    "syscall": {
-      "type": "STRING",
-      "value": "syscall;"
+    "declarations": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "declaration"
+          },
+          {
+            "type": "STRING",
+            "value": ";"
+          },
+          {
+            "type": "STRING",
+            "value": "\n"
+          }
+        ]
+      }
     },
-    "assignment": {
+    "declaration": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "const"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_constant"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "data"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_data"
+            }
+          ]
+        }
+      ]
+    },
+    "statements": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "statement"
+          },
+          {
+            "type": "STRING",
+            "value": ";"
+          },
+          {
+            "type": "STRING",
+            "value": "\n"
+          }
+        ]
+      }
+    },
+    "statement": {
       "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "readMemory"
+          "name": "_syscall"
         },
         {
           "type": "SYMBOL",
-          "name": "writeMemory"
+          "name": "_goto"
         },
         {
           "type": "SEQ",
           "members": [
             {
               "type": "SYMBOL",
-              "name": "register"
+              "name": "writer"
             },
             {
               "type": "STRING",
@@ -65,47 +109,130 @@
             },
             {
               "type": "SYMBOL",
-              "name": "constantDefinitions"
+              "name": "expression"
             }
           ]
         }
       ]
     },
-    "readMemory": {
-      "type": "SEQ",
+    "expression": {
+      "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "register"
+          "name": "reader"
         },
         {
-          "type": "STRING",
-          "value": ":="
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "reader"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "binary_expression"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "reader"
+            }
+          ]
         },
         {
-          "type": "SYMBOL",
-          "name": "byteRegister"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "unary_expression"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "reader"
+            }
+          ]
         }
       ]
     },
-    "writeMemory": {
-      "type": "SEQ",
+    "binary_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "|"
+        },
+        {
+          "type": "STRING",
+          "value": "&"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "operator"
+        }
+      ]
+    },
+    "unary_expression": {
+      "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "byteRegister"
-        },
-        {
-          "type": "STRING",
-          "value": ":="
-        },
-        {
-          "type": "SYMBOL",
-          "name": "bytesAsHex"
+          "name": "operator"
         }
       ]
     },
-    "byteRegister": {
+    "operator": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "+"
+        },
+        {
+          "type": "STRING",
+          "value": "-"
+        }
+      ]
+    },
+    "reader": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "assign"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_constant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_data"
+        }
+      ]
+    },
+    "writer": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "assign"
+        }
+      ]
+    },
+    "assign": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_register"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_memory"
+        }
+      ]
+    },
+    "_memory": {
       "type": "SEQ",
       "members": [
         {
@@ -114,7 +241,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "register"
+          "name": "_register"
         },
         {
           "type": "STRING",
@@ -122,7 +249,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "memorySizeBytes"
+          "name": "_bytes"
         },
         {
           "type": "STRING",
@@ -130,61 +257,66 @@
         }
       ]
     },
-    "constantDefinitions": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "register"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "constant"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "label"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "number"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "word"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "bytesAsHex"
-        }
-      ]
-    },
-    "register": {
-      "type": "PATTERN",
-      "value": "\\$[x,y,i,j]"
-    },
-    "constant": {
+    "_constant": {
       "type": "SEQ",
       "members": [
-        {
-          "type": "STRING",
-          "value": "cnst"
-        },
         {
           "type": "STRING",
           "value": "@"
         },
         {
           "type": "SYMBOL",
-          "name": "word"
+          "name": "_word"
         },
         {
           "type": "SYMBOL",
-          "name": "number"
+          "name": "_number"
         }
       ]
     },
-    "label": {
+    "_data": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "&"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_word"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[0-9a-zA-Z\"_-]"
+        }
+      ]
+    },
+    "_register": {
+      "type": "PATTERN",
+      "value": "\\$[x,y,i,j]"
+    },
+    "_bytes": {
+      "type": "PATTERN",
+      "value": "[1,2,4,8]"
+    },
+    "_syscall": {
+      "type": "STRING",
+      "value": "syscall"
+    },
+    "_goto": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "goto"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_label"
+        }
+      ]
+    },
+    "_label": {
       "type": "SEQ",
       "members": [
         {
@@ -197,34 +329,13 @@
         }
       ]
     },
-    "goto": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "goto"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "label"
-        }
-      ]
-    },
-    "number": {
+    "_number": {
       "type": "PATTERN",
       "value": "\\d+"
     },
-    "memorySizeBytes": {
-      "type": "PATTERN",
-      "value": "[1,2,4,8]"
-    },
-    "word": {
+    "_word": {
       "type": "PATTERN",
       "value": "[a-zA-Z]+"
-    },
-    "bytesAsHex": {
-      "type": "PATTERN",
-      "value": "0x[0-9a-fA-F]+"
     }
   },
   "extras": [

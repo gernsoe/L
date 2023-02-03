@@ -1,161 +1,31 @@
 [
   {
-    "type": "assignment",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "constantDefinitions",
-          "named": true
-        },
-        {
-          "type": "readMemory",
-          "named": true
-        },
-        {
-          "type": "register",
-          "named": true
-        },
-        {
-          "type": "writeMemory",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "byteRegister",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "memorySizeBytes",
-          "named": true
-        },
-        {
-          "type": "register",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "constant",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "word",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "constantDefinitions",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "bytesAsHex",
-          "named": true
-        },
-        {
-          "type": "constant",
-          "named": true
-        },
-        {
-          "type": "label",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "register",
-          "named": true
-        },
-        {
-          "type": "word",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "definition",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "assignment",
-          "named": true
-        },
-        {
-          "type": "constant",
-          "named": true
-        },
-        {
-          "type": "goto",
-          "named": true
-        },
-        {
-          "type": "label",
-          "named": true
-        },
-        {
-          "type": "register",
-          "named": true
-        },
-        {
-          "type": "syscall",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "goto",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "label",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "label",
+    "type": "assign",
     "named": true,
     "fields": {}
   },
   {
-    "type": "readMemory",
+    "type": "binary_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "declaration",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "declarations",
     "named": true,
     "fields": {},
     "children": {
@@ -163,11 +33,50 @@
       "required": true,
       "types": [
         {
-          "type": "byteRegister",
+          "type": "declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
           "named": true
         },
         {
-          "type": "register",
+          "type": "reader",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "operator",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "reader",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "assign",
           "named": true
         }
       ]
@@ -179,17 +88,40 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "definition",
+          "type": "declarations",
+          "named": true
+        },
+        {
+          "type": "statements",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "writeMemory",
+    "type": "statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "writer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "statements",
     "named": true,
     "fields": {},
     "children": {
@@ -197,18 +129,56 @@
       "required": true,
       "types": [
         {
-          "type": "byteRegister",
-          "named": true
-        },
-        {
-          "type": "bytesAsHex",
+          "type": "statement",
           "named": true
         }
       ]
     }
   },
   {
+    "type": "unary_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "writer",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "assign",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\n",
+    "named": false
+  },
+  {
     "type": "#",
+    "named": false
+  },
+  {
+    "type": "&",
+    "named": false
+  },
+  {
+    "type": "+",
     "named": false
   },
   {
@@ -216,7 +186,15 @@
     "named": false
   },
   {
+    "type": "-",
+    "named": false
+  },
+  {
     "type": ":=",
+    "named": false
+  },
+  {
+    "type": ";",
     "named": false
   },
   {
@@ -232,11 +210,11 @@
     "named": false
   },
   {
-    "type": "bytesAsHex",
-    "named": true
+    "type": "const",
+    "named": false
   },
   {
-    "type": "cnst",
+    "type": "data",
     "named": false
   },
   {
@@ -244,23 +222,7 @@
     "named": false
   },
   {
-    "type": "memorySizeBytes",
-    "named": true
-  },
-  {
-    "type": "number",
-    "named": true
-  },
-  {
-    "type": "register",
-    "named": true
-  },
-  {
-    "type": "syscall",
-    "named": true
-  },
-  {
-    "type": "word",
-    "named": true
+    "type": "|",
+    "named": false
   }
 ]

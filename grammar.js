@@ -2,40 +2,99 @@ module.exports = grammar({
 	name: 'L',
 	
 	rules: {
-		source_file: $ => repeat($.definition),
+		source_file: $ => seq($.declarations, $.statements),
 
-		definition: $ => choice($.syscall, $.register, $.constant, $.label, $.goto, $.assignment),
+		declarations: $ =>
+			repeat1(
+				seq($.declaration,
+					';',
+					'\n',
+				)
+			),
+				
+		declaration: $ =>
+			choice(
+				seq('const', $._constant),
+				seq('data', $._data)
+			),
 
-		syscall: $ => 'syscall;',
+		statements: $ => 
+			repeat1(
+				seq(
+					$.statement, 
+					';', 
+					'\n'
+				)
+			),
 
-		assignment: $ => choice(
-			$.readMemory,
-			$.writeMemory,
-			seq($.register, ':=', $.constantDefinitions)
-		),
+		statement: $ =>
+			choice(
+				$._syscall,
+				$._goto,
+				seq($.writer, ':=', $.expression)
+			),
 
-		readMemory: $ => seq($.register, ':=', $.byteRegister),
+		expression: $ =>
+			choice(
+				$.reader,
+				seq($.reader, $.binary_expression, $.reader),
+				seq($.unary_expression, $.reader)
+			),
 
-		writeMemory: $ => seq($.byteRegister, ':=', $.bytesAsHex),
+		binary_expression: $ =>
+			choice(
+				'|',
+				'&',
+				$.operator
+			),
 
-		byteRegister: $ => seq('[', $.register, ',', $.memorySizeBytes, ']'),
+		unary_expression: $ =>
+			choice(
+				$.operator
+			),
 
-		constantDefinitions: $ => choice($.register, $.constant, $.label, $.number, $.word, $.bytesAsHex),
+		operator: $ =>
+			choice(
+				'+',
+				'-'
+			),
+				
+		reader: $ =>
+			choice(
+				$.assign,
+				$._constant,
+				$._data
+			),
 
-		register: $ => /\$[x,y,i,j]/,
+		writer: $ =>
+			choice(
+				$.assign
+			),
+			
+		assign: $ =>
+			choice(
+				$._register,
+				$._memory
+			),
+
+		_memory: $ => seq('[', $._register, ',', $._bytes, ']'),
+
+		_constant: $ => seq('@', $._word, $._number),
+
+		_data: $ => seq('&', $._word, /[0-9a-zA-Z"_-]/),
+
+		_register: () => /\$[x,y,i,j]/,
+
+		_bytes: () => /[1,2,4,8]/, 
+
+		_syscall: () => 'syscall',
 		
-		constant: $ => seq('cnst', '@', $.word, $.number),
+		_goto: $ => seq('goto', $._label),
 
-		label: $ => seq('#', /[a-zA-Z0-9]+/),
+		_label: () => seq('#', /[a-zA-Z0-9]+/),
 
-		goto: $ => seq('goto', $.label),
+		_number: () => /\d+/,
 
-		number: $ => /\d+/,
-
-		memorySizeBytes: $ => /[1,2,4,8]/, 
-
-		word: $ => /[a-zA-Z]+/,
-
-		bytesAsHex: $ => /0x[0-9a-fA-F]+/
+		_word: () => /[a-zA-Z]+/,
 	}
 });
