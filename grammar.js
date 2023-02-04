@@ -14,38 +14,42 @@ module.exports = grammar({
 				
 		declaration: $ =>
 			choice(
-				seq('const', $._constant),
-				seq('data', $._data)
+				seq('const', $.constant),
+				seq('data', $.data)
 			),
 
 		statements: $ => 
 			repeat1(
 				seq(
-					optional($._label),
+					optional($.label),
 					$.statement, 
 					';', 
-					'\n'
+					optional('\n')
 				)
 			),
 
 		statement: $ =>
 			choice(
-				$._syscall,
-				seq($.writer, ':=', $.expression)
+				$.syscall,
+				seq($.writer, ':=', $.expression),
+				seq($.writer, '?=', $.expression)
 			),
 
 		expression: $ =>
 			choice(
-				seq($.reader, $._operator, $.reader),
-				seq($._operator, $.reader),
+				seq($.reader, $.operator, $.reader),
+				seq($.operator, $.reader),
 				$.reader
 			),
 				
 		reader: $ =>
 			choice(
 				$.assign,
-				$._constant,
-				$._data
+				$.constant,
+				$.data,
+				$.label,
+				$.number,
+				$.string
 			),
 
 		writer: $ =>
@@ -55,28 +59,28 @@ module.exports = grammar({
 			
 		assign: $ =>
 			choice(
-				$._register,
-				$._memory
+				$.register,
+				$.memory
 			),
 
-		_memory: $ => seq('[', $._register, ',', $._bytes, ']'),
+		constant: $ => seq('@', $.address, $.number),
 
-		_constant: $ => seq('@', $._word, $._number),
+		data: $ => seq('&', $.address, choice($.number, $.string)),
 
-		_data: $ => seq('&', $._word, /[0-9a-zA-Z"_-]/),
+		label: $ => seq('#', $.address),
 
-		_register: () => /\$[x,y,i,j,?,!]/,
+		memory: $ => seq('[', $.register, ',', $.number, ']'),
 
-		_bytes: () => /[1,2,4,8]/, 
+		string: $ => seq('"', repeat(/[^"]+/), '"'),
 
-		_syscall: () => 'syscall',
+		register: () => /\$[x,y,i,j,?,!]/,
 
-		_label: () => seq('#', /[a-zA-Z0-9]+/),
+		syscall: () => 'syscall',
 
-		_operator: () => /[\+\/\-\*\|\&]+/,
+		operator: () => /[+/\-*|&]+/,
 
-		_number: () => /\d+/,
+		number: () => /[0-9]+/,
 
-		_word: () => /[a-zA-Z]+/,
+		address: () => /[a-zA-Z_]+/,
 	}
 });

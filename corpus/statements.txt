@@ -1,10 +1,10 @@
+==============
+full test
+==============
 const @MSG_LENGTH 14;
 const @SYS_WRITE 4;
 const @STD_OUT 1;
 data &MSG "Hello world!\n";
-data &ACC 123;
-
-$x:=1;
 
 #HERE
 $x:=@STD_OUT;
@@ -16,3 +16,4 @@ $x:=-5;
 $? := 1;
 $! ?= #HERE - 1;
 $! := #HERE - 1;
+---

@@ -1,0 +1,57 @@
+==============
+constants
+==============
+const @MSG_LENGTH 14;
+const @SYS_WRITE 4;
+const @STD_OUT 1;
+
+$x:=1;
+---
+(source_file 
+  (declarations 
+    (declaration 
+      (constant 
+        (address) 
+        (number))) 
+    (declaration 
+      (constant 
+        (address) 
+        (number))) 
+    (declaration 
+      (constant 
+        (address) 
+        (number)))) 
+  (statements 
+    (statement 
+      (writer
+        (assign
+          (register))) 
+        (expression 
+          (reader 
+            (number))))))
+==============
+data
+==============
+data &MSG "Hello world!\n";
+data &ACC 123;
+
+$x:=1;
+---
+(source_file 
+  (declarations 
+    (declaration 
+      (data 
+        (address) 
+        (string))) 
+    (declaration 
+      (data 
+      (address) 
+      (number)))) 
+  (statements 
+    (statement 
+      (writer 
+        (assign 
+          (register))) 
+        (expression 
+          (reader 
+            (number)))))) 
