@@ -31,8 +31,8 @@ module.exports = grammar({
 		statement: $ =>
 			choice(
 				$.syscall,
-				seq($.writer, ':=', $.expression),
-				seq($.writer, '?=', $.expression)
+				field("assignment", seq($.writer, ':=', $.expression)),
+				field("conditional", seq($.writer, '?=', $.expression))
 			),
 
 		expression: $ =>
@@ -48,8 +48,8 @@ module.exports = grammar({
 				$.constant,
 				$.data,
 				$.label,
-				$.number,
-				$.string
+				$._number,
+				$._string
 			),
 
 		writer: $ =>
@@ -63,15 +63,15 @@ module.exports = grammar({
 				$.memory
 			),
 
-		constant: $ => seq('@', $.address, $.number),
+		constant: $ => seq('@', $._address, optional($._number)),
 
-		data: $ => seq('&', $.address, choice($.number, $.string)),
+		data: $ => seq('&', $._address, choice($._number, $._string)),
 
-		label: $ => seq('#', $.address),
+		label: $ => seq('#', $._address),
 
-		memory: $ => seq('[', $.register, ',', $.number, ']'),
+		memory: $ => seq('[', $.register, ',', $._number, ']'),
 
-		string: $ => seq('"', repeat(/[^"]+/), '"'),
+		_string: $ => seq('"', repeat(/[^"]+/), '"'),
 
 		register: () => /\$[x,y,i,j,?,!]/,
 
@@ -79,8 +79,8 @@ module.exports = grammar({
 
 		operator: () => /[+/\-*|&]+/,
 
-		number: () => /[0-9]+/,
+		_number: () => /[0-9]+/,
 
-		address: () => /[a-zA-Z_]+/,
+		_address: () => /[a-zA-Z_]+/,
 	}
 });
