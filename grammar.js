@@ -48,8 +48,8 @@ module.exports = grammar({
 				$.constant,
 				$.data,
 				$.label,
-				$._number,
-				$._string
+				$.number,
+				$.string
 			),
 
 		writer: $ =>
@@ -62,16 +62,26 @@ module.exports = grammar({
 				$.register,
 				$.memory
 			),
+		
+		datavar: $ => {
+			choice(
+				$.constant,
+				$.data,
+				$.label
+			)
+		},
 
-		constant: $ => seq('@', $._address, optional($._number)),
+		constant: $ => /@[A-Z]+\s[0-9]+/,
+		//constant: $ => seq('@', $.address, optional($.number)),
 
-		data: $ => seq('&', $._address, choice($._number, $._string)),
+		data: $ => /&[A-Z]+\s".+"/,
+		//data: $ => seq('&', $.address, choice($.number, $.string)),
 
-		label: $ => seq('#', $._address),
+		label: $ => /#[A-Z]+/,
 
-		memory: $ => seq('[', $.register, ',', $._number, ']'),
+		memory: $ => seq('[', $.register, ',', $.number, ']'),
 
-		_string: $ => seq('"', repeat(/[^"]+/), '"'),
+		string: $ => seq('"', repeat(/[^"]+/), '"'),
 
 		register: () => /\$[x,y,i,j,?,!]/,
 
@@ -79,8 +89,8 @@ module.exports = grammar({
 
 		operator: () => /[+/\-*|&]+/,
 
-		_number: () => /[0-9]+/,
+		number: () => /[0-9]+/,
 
-		_address: () => /[a-zA-Z_]+/,
+		address: () => /[a-zA-Z_]+/,
 	}
 });
