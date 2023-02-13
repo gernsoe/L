@@ -48,8 +48,7 @@ module.exports = grammar({
 				$.constant,
 				$.data,
 				$.label,
-				$.number,
-				$.string
+				$.number
 			),
 
 		writer: $ =>
@@ -62,35 +61,35 @@ module.exports = grammar({
 				$.register,
 				$.memory
 			),
-		
-		datavar: $ => {
+
+		datavar: $ =>
 			choice(
 				$.constant,
 				$.data,
 				$.label
-			)
-		},
+			),
 
 		constant: $ => /@[A-Z]+\s[0-9]+/,
 		//constant: $ => seq('@', $.address, optional($.number)),
-
+		
 		data: $ => /&[A-Z]+\s".+"/,
 		//data: $ => seq('&', $.address, choice($.number, $.string)),
-
-		label: $ => /#[A-Z]+/,
+	
+		label: $ => /#[A-Z]/,
+		//label: $ => seq('#', $.address),
 
 		memory: $ => seq('[', $.register, ',', $.number, ']'),
 
-		string: $ => seq('"', repeat(/[^"]+/), '"'),
+		//string: $ => seq('"', repeat(/[^"]+/), '"'),
 
-		register: () => /\$[x,y,i,j,?,!]/,
+		register: () => /\$[x,y,i,j,k,l,m,n,?,!]/,
 
 		syscall: () => 'syscall',
 
-		operator: () => /[+/\-*|&]+/,
+		operator: () => /[+-/\*|&><=]+/,
 
 		number: () => /[0-9]+/,
 
-		address: () => /[a-zA-Z_]+/,
+		//address: () => /[a-zA-Z_]+/,
 	}
 });
