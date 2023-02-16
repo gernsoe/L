@@ -14,8 +14,8 @@ module.exports = grammar({
 				
 		declaration: $ =>
 			choice(
-				seq('const', $.constant),
-				seq('data', $.data)
+				seq('const', $.constant_declaration),
+				seq('data', $.data_declaration)
 			),
 
 		statements: $ => 
@@ -45,9 +45,7 @@ module.exports = grammar({
 		reader: $ =>
 			choice(
 				$.assign,
-				$.constant,
-				$.data,
-				$.label,
+				$.datavar,
 				$.number
 			),
 
@@ -69,13 +67,17 @@ module.exports = grammar({
 				$.label
 			),
 
-		constant: $ => /@[A-Z]+\s[0-9]+/,
+		constant_declaration: $ => /@[A-Z]+\s[0-9]+/,
+
+		data_declaration: $ => /&[A-Z]+\s".+"/,
 		//constant: $ => seq('@', $.address, optional($.number)),
-		
-		data: $ => /&[A-Z]+\s".+"/,
+
+		constant: $ => /@[A-Z]+/,
+
+		data: $ => /&[A-Z]+/,
 		//data: $ => seq('&', $.address, choice($.number, $.string)),
 	
-		label: $ => /#[A-Z]/,
+		label: $ => /#[A-Z]+/,
 		//label: $ => seq('#', $.address),
 
 		memory: $ => seq('[', $.register, ',', $.number, ']'),

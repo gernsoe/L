@@ -54,7 +54,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "constant"
+              "name": "constant_declaration"
             }
           ]
         },
@@ -67,7 +67,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "data"
+              "name": "data_declaration"
             }
           ]
         }
@@ -212,15 +212,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "constant"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "data"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "label"
+          "name": "datavar"
         },
         {
           "type": "SYMBOL",
@@ -267,17 +259,25 @@
         }
       ]
     },
-    "constant": {
+    "constant_declaration": {
       "type": "PATTERN",
       "value": "@[A-Z]+\\s[0-9]+"
     },
-    "data": {
+    "data_declaration": {
       "type": "PATTERN",
       "value": "&[A-Z]+\\s\".+\""
     },
+    "constant": {
+      "type": "PATTERN",
+      "value": "@[A-Z]+"
+    },
+    "data": {
+      "type": "PATTERN",
+      "value": "&[A-Z]+"
+    },
     "label": {
       "type": "PATTERN",
-      "value": "#[A-Z]"
+      "value": "#[A-Z]+"
     },
     "memory": {
       "type": "SEQ",
